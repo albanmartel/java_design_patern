@@ -1,16 +1,19 @@
-# Compiled class file
+# Fichiers Java compilés
 *.class
 
-# Log file
+# Journaux et rapports d’erreur
 *.log
+hs_err_pid*
+replay_pid*
 
-# BlueJ files
+# Fichiers BlueJ
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
+# Outils Java mobiles (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Fichiers d’archives et de paquets
+# À conserver seulement si ces fichiers ne doivent pas être versionnés
 *.jar
 *.war
 *.nar
@@ -19,6 +22,59 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Eclipse
+.metadata/
+.recommenders/
+.settings/
+.project
+.classpath
+.factorypath
+.apt_generated/
+
+# Visual Studio Code
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Fichiers de compilation et de construction
+bin/
+build/
+target/
+.gradle/
+.gradle-cache/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100/
+.fseventsd/
+.Spotlight-V100/
+.TemporaryItems/
+.Trashes/
+.VolumeIcon.icns
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux et environnements de bureau
+.directory
+.Trash-*
+.nfs*
+
+# Fichiers temporaires et éditeurs
+*~
+*.swp
+*.swo
+*.tmp
