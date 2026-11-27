@@ -1,0 +1,20 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 65
+left to right direction
+
+package "ui\nInterface Utilisateur" as UserInterface
+package "service\nCouche Metier" as Service
+package "factory\nFabrique de comptes" as Factory
+package "model\nModele du domaine" as Model
+package "dao\nAcces aux donnees" as Dao
+package "db\nConnexion MySQL" as Db
+
+UserInterface ..> Service : <<use>>
+Service ..> Dao : <<use>>
+Service ..> Model : <<use>>
+Dao ..> Model : <<use>>
+Dao ..> Factory : <<use>>
+Dao ..> Db : <<use>>
+@enduml
