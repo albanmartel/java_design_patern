@@ -1,0 +1,9 @@
+@startuml
+skinparam classAttributeIconSize 0
+left to right direction
+
+class Client
+class CompteBancaire
+
+Client "1" --> "0..*" CompteBancaire : possede >
+@enduml
