@@ -22,6 +22,7 @@ class CompteBancaire
 Client "1" --> "0..*" CompteBancaire : possede >
 @enduml
 ```
+![Diagramme de classes exemple 1](exemple1.png)
 
 * **À côté de `CompteBancaire` :** `0..*` (ou `*`).
 * *Lecture :* **un** `Client` peut posséder **0, 1 ou plusieurs** `CompteBancaire` (un nouveau client peut n'avoir aucun compte actif, ou en avoir un courant et un épargne).
@@ -45,6 +46,8 @@ class LigneHistorique
 CompteBancaire "1" --> "0..*" LigneHistorique : contient >
 @enduml
 ```
+![Diagramme de classes exemple 2](exemple2.png)
+
 * **À côté de `LigneHistorique` :** `0..*`.
 * *Lecture :* **un** `CompteBancaire` peut avoir **0, 1 ou plusieurs** `LigneHistorique` (un compte qui vient d'ouvrir n'a aucune opération).
 
@@ -67,6 +70,7 @@ class Passeport
 Personne "1" --> "0..1" Passeport : detient >
 @enduml
 ```
+![Diagramme de classes exemple 3](exemple3.png)
 * **À côté de `Passeport` :** `0..1`.
 * *Lecture :* **une** `Personne` possède **0 ou 1** `Passeport` valide.
 
@@ -89,6 +93,7 @@ class Cours
 Etudiant "0..*" -- "0..*" Cours : suit >
 @enduml
 ````
+![Diagramme de classes exemple 4](exemple4.png)
 * **À côté de `Cours` :** `0..*`.
 * *Lecture :* **un** `Etudiant` peut suivre **0 à plusieurs** `Cours`.
 
@@ -126,6 +131,7 @@ class Produit
 Commande "0..*" -- "1..*" Produit : concerne >
 @enduml
 ````
+![Diagramme de classes exemple 5](exemple5.png)
 
 Sur une relation entre `Commande` et `Produit`, tu vois **`1..*`** écrit juste à côté de `Produit`, et **`0..*`** écrit juste à côté de `Commande`.
 
