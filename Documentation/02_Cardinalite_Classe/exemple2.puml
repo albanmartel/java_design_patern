@@ -2,8 +2,8 @@
 skinparam classAttributeIconSize 0
 left to right direction
 
-class Client
 class CompteBancaire
+class LigneHistorique
 
-Client "1" --> "0..*" CompteBancaire : possede >
+CompteBancaire "1" --> "0..*" LigneHistorique : contient >
 @enduml

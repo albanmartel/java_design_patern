@@ -1,0 +1,9 @@
+@startuml
+skinparam classAttributeIconSize 0
+left to right direction
+
+class Commande
+class Produit
+
+Commande "0..*" -- "1..*" Produit : concerne >
+@enduml
