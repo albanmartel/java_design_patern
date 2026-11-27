@@ -1,0 +1,51 @@
+@startuml
+autonumber
+skinparam responseMessageBelowArrow true
+
+actor Utilisateur as User
+participant "ConsoleBank" as UI
+participant "BankService" as Service
+participant "AccountDao" as AccDao
+participant "AccountDaoImpl" as AccDaoImpl
+participant "DatabaseConnection" as DB
+participant "AccountFactory" as Factory
+participant "BankAccount" as Account
+participant "TransactionHistoryDao" as HistDao
+
+User -> UI : Saisir demande de retrait\n(numeroCompte, montant, description)
+UI -> Service : makeWithdrawal(numeroCompte, montant, description)
+
+Service -> AccDao : findByNumber(numeroCompte)
+AccDao -> AccDaoImpl : findByNumber(numeroCompte)
+AccDaoImpl -> DB : getConnection()
+DB --> AccDaoImpl : Connection MySQL
+AccDaoImpl -> Factory : createAccount(typeCompte, numero, solde)
+Factory --> AccDaoImpl : BankAccount (CurrentAccount / SavingsAccount)
+AccDaoImpl --> Service : Optional<BankAccount>
+
+alt Compte introuvable
+  Service --> UI : lever CompteIntrouvableException
+  UI --> User : Afficher message d'erreur (compte inexistant)
+else Compte existant
+  Service -> Account : canWithdraw(montant)
+  Account --> Service : boolean (resultat regle metier)
+
+  alt Solde insuffisant
+    Service --> UI : lever SoldeInsuffisantException
+    UI --> User : Afficher message d'erreur (solde insuffisant)
+  else Retrait autorise
+    Service -> Account : debit(montant)
+    Service -> AccDao : updateBalance(numeroCompte, nouveauSolde)
+    AccDao -> AccDaoImpl : updateBalance(numeroCompte, nouveauSolde)
+    AccDaoImpl -> DB : getConnection()
+    DB --> AccDaoImpl : Connection MySQL
+    AccDaoImpl --> Service : OK
+
+    Service -> HistDao : save(numeroCompte, ligneHistorique)
+    HistDao --> Service : OK
+
+    Service --> UI : Retrait effectue
+    UI --> User : Afficher confirmation
+  end
+end
+@enduml
