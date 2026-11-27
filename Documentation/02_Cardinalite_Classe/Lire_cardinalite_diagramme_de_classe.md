@@ -11,7 +11,8 @@ En UML, on parle de **multiplicité** (souvent appelée *cardinalité* par habit
 
 Imagine une relation entre `Client` et `CompteBancaire` :
 
-```plantuml
+_Code PlantUML_ :
+```python
 @startuml
 skinparam classAttributeIconSize 0
 left to right direction
@@ -22,6 +23,8 @@ class CompteBancaire
 Client "1" --> "0..*" CompteBancaire : possede >
 @enduml
 ```
+_Image générée à partir du code précédent_ : 
+
 ![Diagramme de classes exemple 1](exemple1.png)
 
 * **À côté de `CompteBancaire` :** `0..*` (ou `*`).
@@ -35,7 +38,8 @@ Client "1" --> "0..*" CompteBancaire : possede >
 
 #### Exemple 2 : Un compte bancaire et ses lignes d'historique (`1` vers `0..*`)
 
-```plantuml
+_Code PlantUML_ :
+```python
 @startuml
 skinparam classAttributeIconSize 0
 left to right direction
@@ -46,6 +50,8 @@ class LigneHistorique
 CompteBancaire "1" --> "0..*" LigneHistorique : contient >
 @enduml
 ```
+_Image générée à partir du code précédent_ : 
+
 ![Diagramme de classes exemple 2](exemple2.png)
 
 * **À côté de `LigneHistorique` :** `0..*`.
@@ -59,7 +65,8 @@ CompteBancaire "1" --> "0..*" LigneHistorique : contient >
 
 #### Exemple 3 : Un passeport et une personne (`1` vers `0..1`)
 
-```plantuml
+_Code PlantUML_ :
+```python
 @startuml
 skinparam classAttributeIconSize 0
 left to right direction
@@ -70,7 +77,11 @@ class Passeport
 Personne "1" --> "0..1" Passeport : detient >
 @enduml
 ```
+
+_Image générée à partir du code précédent_ : 
+
 ![Diagramme de classes exemple 3](exemple3.png)
+
 * **À côté de `Passeport` :** `0..1`.
 * *Lecture :* **une** `Personne` possède **0 ou 1** `Passeport` valide.
 
@@ -82,7 +93,8 @@ Personne "1" --> "0..1" Passeport : detient >
 
 #### Exemple 4 : Un étudiant et des cours (`0..*` vers `0..*`)
 
-````plantuml
+_Code PlantUML_ :
+```python
 @startuml
 skinparam classAttributeIconSize 0
 left to right direction
@@ -92,8 +104,12 @@ class Cours
 
 Etudiant "0..*" -- "0..*" Cours : suit >
 @enduml
-````
+```
+
+_Image générée à partir du code précédent_ : 
+
 ![Diagramme de classes exemple 4](exemple4.png)
+
 * **À côté de `Cours` :** `0..*`.
 * *Lecture :* **un** `Etudiant` peut suivre **0 à plusieurs** `Cours`.
 
@@ -120,7 +136,8 @@ Beaucoup d'étudiants lisent *« Un `CompteBancaire` a `0..*` `Client` »* parce
 
 ### Test rapide pour vérifier le réflexe
 
-````plantuml
+_Code PlantUML_ :
+```python
 @startuml
 skinparam classAttributeIconSize 0
 left to right direction
@@ -130,7 +147,10 @@ class Produit
 
 Commande "0..*" -- "1..*" Produit : concerne >
 @enduml
-````
+```
+
+_Image générée à partir du code précédent_ : 
+
 ![Diagramme de classes exemple 5](exemple5.png)
 
 Sur une relation entre `Commande` et `Produit`, tu vois **`1..*`** écrit juste à côté de `Produit`, et **`0..*`** écrit juste à côté de `Commande`.
