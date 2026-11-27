@@ -1,0 +1,156 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 35
+skinparam ranksep 60
+left to right direction
+
+package "Package ui : Interface Utilisateur" as UserInterface {
+  class ConsoleBank {
+    - bankService : BankService
+    - scanner : Scanner
+    + displayClients() : void
+    + displayClientAccounts() : void
+    + makeDeposit() : void
+    + makeWithdrawal() : void
+    + displayTransactionHistory() : void
+  }
+  note bottom of ConsoleBank : Classe Banque Console
+}
+
+package "Package service" as Service {
+  class BankService {
+    - clientDao : ClientDao
+    - accountDao : AccountDao
+    - transactionHistoryDao : TransactionHistoryDao
+    + getClients() : List<Customer>
+    + getClientAccounts(clientId : String) : List<BankAccount>
+    + makeDeposit(accountNumber : String, amount : BigDecimal, description : String) : void
+    + makeWithdrawal(accountNumber : String, amount : BigDecimal, description : String) : void
+    + getTransactionHistory(accountNumber : String) : List<TransactionHistory>
+  }
+  note bottom of BankService : Classe Banque Service
+}
+
+package "Package Factory : fabrique de comptes bancaires" as Factory {
+  class AccountFactory {
+    + {static} createAccount(accountType : String, number : String, initialBalance : BigDecimal) : BankAccount
+  }
+  note bottom of AccountFactory : Classe Fabrique de compte
+}
+
+package "Package modèle : model" as Model {
+  class Customer {
+    - id : String
+    - surname : String
+    - firstName : String
+    - accounts : List<BankAccount>
+    + getId() : String
+    + getFullName() : String
+    + getAccounts() : List<BankAccount>
+  }
+  note top of Customer : Classe Client d'une banque
+
+  abstract class BankAccount {
+    # accountNumber : String
+    # balance : BigDecimal
+    # accountType : String
+    + getNumber() : String
+    + getBalance() : BigDecimal
+    + credit(amount : BigDecimal) : void
+    + debit(amount : BigDecimal) : void
+    + {abstract} canWithdraw(amount : BigDecimal) : boolean
+  }
+  note top of BankAccount : Classe Compte bancaire
+
+  class CurrentAccount {
+    - authorisedOverdraft : BigDecimal
+    + getAuthorisedOverdraft() : BigDecimal
+    + canWithdraw(amount : BigDecimal) : boolean
+  }
+  note top of CurrentAccount : Classe Compte courant
+
+  class SavingsAccount {
+    - interestRate : BigDecimal
+    + getInterestRate() : BigDecimal
+    + calculateInterest() : BigDecimal
+    + canWithdraw(amount : BigDecimal) : boolean
+  }
+  note top of SavingsAccount : Classe Compte epargne
+
+  class TransactionHistory {
+    - requestDate : LocalDateTime
+    - validationDate : LocalDateTime
+    - description : String
+    - debit : BigDecimal
+    - credit : BigDecimal
+    + getRequestDate() : LocalDateTime
+    + getApprovalDate() : LocalDateTime
+    + getDescription() : String
+    + getDebit() : BigDecimal
+    + getCredit() : BigDecimal
+  }
+  note top of TransactionHistory : Classe Ligne d'historique de transaction
+}
+
+package "Package DAO : Objet d'accès aux données" as Dao {
+  interface ClientDao {
+    + findAll() : List<Customer>
+    + findById(id : String) : Optional<Customer>
+  }
+  note top of ClientDao : Interface Client DAO
+  
+  interface AccountDao {
+    + findByNumber(number : String) : Optional<BankAccount>
+    + findByClientId(clientId : String) : List<BankAccount>
+    + updateBalance(accountNumber : String, newBalance : BigDecimal) : void
+  }
+  note top of AccountDao : Interface Compte DAO
+
+  interface TransactionHistoryDao {
+    + save(accountNumber : String, line : TransactionHistory) : void
+    + findByAccountNumber(accountNumber : String) : List<TransactionHistory>
+  }
+  note top of TransactionHistoryDao : Interface Historique DAO
+
+  class ClientDaoImpl
+  class AccountDaoImpl
+  class TransactionHistoryDaoImpl
+}
+
+package "Package DB : Base de données" as Db {
+  class DatabaseConnection {
+    - {static} instance : DatabaseConnection
+    - url : String
+    - user : String
+    - password : String
+    + {static} getInstance() : DatabaseConnection
+    + getConnection() : Connection
+  }
+  note top of DatabaseConnection : Classe Connexion à la base de donnees
+}
+
+' Relations metier et domaine
+ClientDaoImpl -right-> DatabaseConnection
+AccountDaoImpl -right-> DatabaseConnection
+TransactionHistoryDaoImpl -right-> DatabaseConnection
+
+ConsoleBank -right-> BankService
+BankService -right-> ClientDao
+BankService -right-> AccountDao
+BankService -right-> TransactionHistoryDao
+BankService .up.> BankAccount
+BankService .up.> TransactionHistory
+
+Customer "1" -right-> "0..*" BankAccount : owns >
+BankAccount <|-up- CurrentAccount
+BankAccount <|-up- SavingsAccount
+BankAccount "1" -up-> "0..*" TransactionHistory : tracks >
+
+AccountDaoImpl .left.> AccountFactory : uses >
+
+' Implementations DAO et connexion MySQL
+ClientDao <|.up. ClientDaoImpl
+AccountDao <|.up. AccountDaoImpl
+TransactionHistoryDao <|.up. TransactionHistoryDaoImpl
+@enduml
